@@ -1753,5 +1753,10 @@ td {
   border: 1px solid;
   padding: .5rem !important;
 }
-
+.error{
+  color: red;
+}
+.form-check{
+  justify-content: start!important;
+}
 /**************************** Form Css End ***************************************/

@@ -32,7 +32,7 @@
                 <div class="row my-2">
                     <p class="phara-bold">What Do You Want To Trademark or Copyright?</p>
                     <div class="row mb-3">
-                    <div class="col-12 mb-3 d-flex align-items-center gap-2">
+                    <div class="col-12 mb-3">
                         <div class="form-check form-check-type input_group ps-0 d-flex align-items-center flex-wrap gap-3">
                             <div class="brand-checked get-label">
                                 <input class="radio-fields brand-showwalle get-value" type="checkbox" id="Tagline"
@@ -74,7 +74,7 @@
                                     <span class="position-relative input-fields d-flex">
                                         Drag your logo here or click to upload
                                     </span>
-                                    <input type="file" class="w-100 uploadimage" accept="image/*">
+                                    <input type="file" id="logo" name="uploadimage" class="w-100 uploadimage" accept="image/*" >
                                 </div>
                                 <div class="show-images w-100 mt-3"></div>
                             </div>
@@ -473,7 +473,7 @@
                     </p>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <input type="hidden" name="selected-package-name" value="No package selected">
+                            <input type="text" name="selected-package-name" value="No package selected" class="d-none">
                             <input type="hidden" name="selected-package-price" value="$0.00">
                             <table id="createtd" class="w-100 mt-2">
                                 <tbody id="">
@@ -542,6 +542,7 @@
             </div>
         </div>
     </form>
+
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -621,7 +622,7 @@
 
 
     // Summary Table Value
-  function updateTable() {
+ function updateTable() {
     let tableBody = document.getElementById('createtd').getElementsByTagName('tbody')[0];
 
     // Clear the table except for the default rows
@@ -658,10 +659,14 @@
     // Package name/price row
     let packageName = $("input[name='selected-package-name']").val();
     let packagePrice = $("input[name='selected-package-price']").val();
+    let numericPrice = parseFloat(packagePrice.replace('$', '').trim()) || 0;
+    let quantity = selectedTrademarks.length || 1; // ensure at least 1 to avoid zero
+    let calculatedPackagePrice = numericPrice * quantity;
+
     tableBody.innerHTML += `
         <tr>
             <td id="selected-package-name">${packageName}</td>
-            <td id="selected-package-price">${packagePrice}</td>
+            <td id="selected-package-price">$${calculatedPackagePrice.toFixed(2)}</td>
         </tr>
     `;
 
@@ -678,7 +683,7 @@
     // Total calculation
     const popupAmountElement = document.querySelector('.totaldue_amount');
     const gateTotalAmount = document.querySelector('.gate-totalamount');
-    let totalAmount = parseFloat(packagePrice.replace('$', '').trim()) + expeditedPrice;
+    let totalAmount = calculatedPackagePrice + expeditedPrice;
 
     if (popupAmountElement) popupAmountElement.innerHTML = `$${totalAmount.toFixed(2)}`;
     if (gateTotalAmount) gateTotalAmount.innerHTML = `$${totalAmount.toFixed(2)}`;
@@ -810,6 +815,80 @@
         });
     });
 </script>
+
+
+<!-- jQuery and jQuery Validation -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script>
+$(document).ready(function () {
+    $.validator.addMethod("requireCheckbox", function () {
+        return $('input[name="trademark"]:checked').length > 0;
+    }, "Please select at least one trademark option.");
+
+    $.validator.addMethod("requirePackage", function () {
+        const val = $('input[name="selected-package-name"]').val()?.trim().toLowerCase();
+        return val && val !== "no package selected";
+    }, "Please select a package.");
+
+    if (!$('#trademark-error-container').length) {
+        $(".form-check-type.input_group").after('<label id="trademark-error" class="error d-block" for="trademark"></label>');
+    }
+    if (!$('#package-error-container').length) {
+        $('input[name="selected-package-name"]').after('<label id="package-error" class="error d-block" for="selected-package-name"></label>');
+    }
+
+    $("form").validate({
+        ignore: [],
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "trademark") {
+                error.appendTo("#trademark-error");
+            } else if (element.attr("name") === "selected-package-name") {
+                error.appendTo("#package-error");
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        rules: {
+            protect_name: "required",
+            protect_services: "required",
+            slogan_text: {
+                required: function () {
+                    return $('#slogan').is(':checked');
+                }
+            },
+            "selected-package-name": {
+                requirePackage: true,
+                required: {
+                    depends: function () {
+                        return true;
+                    }
+                }
+            },
+            "trademark": { requireCheckbox: true }
+        },
+        submitHandler: function (form) {
+            const data = {
+                protect_name: $('#protect_name').val(),
+                protect_services: $('#protect_services').val(),
+                slogan: $('#slogan').is(':checked') ? $('#sloganText').val() : '',
+                logo_uploaded: $('.uploadimage')[0]?.files?.[0]?.name || 'Not uploaded',
+                selected_package_name: $('input[name="selected-package-name"]').val(),
+                selected_package_price: $('input[name="selected-package-price"]').val(),
+                expedited: $('#ch24hour').is(':checked') ? 'Yes' : 'No',
+                trademark_options: $('input[name="trademark"]:checked').map(function () {
+                    return this.value;
+                }).get(),
+                total_due_now: $('.totaldue_amount').text()?.trim() || 'Unavailable'
+            };
+            console.log("Form submission data:", data);
+            // form.submit(); // Disabled for testing
+        }
+    });
+});
+</script>
+
+
 </body>
 
 </html>
