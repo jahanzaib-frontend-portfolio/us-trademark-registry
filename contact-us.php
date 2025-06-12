@@ -9,9 +9,10 @@
                         Get in Touch
                     </h1>
                     <p>
-                        Are you looking to get trademark and copyright registration services? Contact us. Our
-                        representative will get back to you!
+                        Interested in trademark or copyright registration services? Reach out to us today—our team will
+                        respond promptly to assist you with your needs.
                     </p>
+
                 </div>
             </div>
         </div>
@@ -23,16 +24,16 @@
         <div class="row">
             <div class="col-lg-5 col-md-12">
                 <div class="color-bg">
-                    <h4 class="fs-40">Before Contacting Us….</h4>
-                    <p class="fs-16 padding">Our organization is not a licensed legal provider, and any information
-                        or
-                        advice provided by our consultants should not be interpreted as being legally binding. It is
-                        important to keep in mind that experts may assist you in the process, but ultimately the
-                        final
-                        decision lies within the jurisdiction of the USPTO. They may issue refusals following the
-                        Trademark Act of 1946, 15 U.S.C. 1051 et seq., or the Trademark Rules of Practice, 37 C.F.R.
-                        Part 2. If you are interested in obtaining legal advice, you should consult with a lawyer.
+                    <h4 class="fs-40">Before Contacting Us…</h4>
+                    <p class="fs-16 padding">
+                        Please note that US Trademark Registry is not a licensed legal service provider. Any information
+                        or guidance offered by our consultants is for informational purposes only and should not be
+                        considered legal advice. While our experts can assist with the registration process, final
+                        decisions are made solely by the United States Patent and Trademark Office (USPTO) in accordance
+                        with the Trademark Act of 1946 (15 U.S.C. §1051 et seq.) and the Trademark Rules of Practice (37
+                        C.F.R. Part 2). For legal counsel, we recommend consulting a qualified attorney.
                     </p>
+
 
                     <ul class="contact-details">
                         <li>
